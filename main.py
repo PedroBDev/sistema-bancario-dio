@@ -1,34 +1,60 @@
-from conta import Conta
+from conta import Cliente, Conta
+lista_cliente = []
+info_cliente = None
+digito = 0
+def checar_cliente(cpf):
+    for cliente in lista_cliente:
+            if cpf == cliente['cpf']:
+                return True
+            else:
+                return False
 
-conta = Conta()
 while True:
-    escolha = int(input('''               --------------------------------------
-                            Bem Vindo ao Sistema Bancário
+    print('Bem vindo ao nosso Banco!!')
+    escolha = int(input('[1] - Realizar cadastro/ [2] - Criar Conta/ [3] - Acessar conta/ [4] - Sair '))
 
-                            [1] - Sacar
-                            [2] - Depositar
-                            [3] - Extrato
-                            [4] - Sair
+    if escolha == 1 :
+        digito+=1
+        info_cliente = Cliente.criar_cliente(digito)
+        if info_cliente is None:
+            print('Você é menor de idade, portanto, não é possível realizar o cadastro!')
+            break
+        else:
+            if checar_cliente(cpf = info_cliente.info_cliente['cpf']):
+                print('Usuário já cadastrado!')
+                continue
+            else:
+                lista_cliente.append(info_cliente.info_cliente)
+                print(lista_cliente)
 
-                        -------------------------------------
- :'''))
-
-    if escolha == 1:
-        try:
-            valor_saque = float(input('Informe o valor do Saque:'))
-            conta.saque(valor_saque)
-        except TypeError:
-            print('Por favor, digite apenas número!')
-            continue
     elif escolha == 2:
-        try:
-            valor_deposito = float(input('Informe o valor do Saque:'))
-            conta.deposito(valor_deposito)
-        except ValueError:
-            print('Por favor, digite apenas número!')
-            continue
+       cpf_input = int(input('Informe seu cpf(sem pontos ou tracos, apenas números):'))
+       print(type(cpf_input))
+       if checar_cliente(cpf_input):
+           for cliente_encontrado in lista_cliente:
+               if cpf_input== cliente_encontrado['cpf']:
+                   digito+=1
+                   conta = Conta.criar_conta(digito)
+                   cliente_encontrado['num_conta'].append(conta.numero_conta)
+                   cliente_encontrado['tipo_conta'].append(conta.tipo_conta)
+       else:
+           print("Por favor, cadastre-se!")
+
+
+
     elif escolha == 3:
-        conta.extrato()
+        if info_cliente:
+            info_cliente.acesso_conta(info_cliente)
+        else:
+            print("Por favor, cadastre-se!")
+
+    elif escolha == 4:
+        break
 
     else:
-        break
+        print('informe uma opção válida')
+        continue
+    
+
+        
+
